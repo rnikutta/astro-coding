@@ -98,6 +98,9 @@ const drawCells = () => {
 
 let animationId = null;
 const playPauseButton = document.getElementById("play-pause");
+const stepButton = document.getElementById("step");
+const fpsInput = document.getElementById("fps")
+fpsInput.value = maxFps;
 
 const isPaused = () => {
   return animationId === null;
@@ -114,6 +117,12 @@ const pause = () => {
   animationId = null;
 }
 
+fpsInput.addEventListener('input', (e) => {
+  maxFps = e.target.value;
+})
+
+
+
 playPauseButton.addEventListener("click", event => {
   if (isPaused()) {
     play();
@@ -122,11 +131,17 @@ playPauseButton.addEventListener("click", event => {
   }
 });
 
+stepButton.addEventListener("click", event => {
+  if (isPaused()) {
+    step();
+  }
+});
+
 canvas.addEventListener("click", event => {
   const boundingRect = canvas.getBoundingClientRect();
   const scaleX = canvas.width / boundingRect.width;
   const scaleY = canvas.height / boundingRect.height;
-  const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
+  const canvasLeft = (evenientX - boundingRect.left) * scaleX;
   const canvasTop = (event.clientY - boundingRect.top) * scaleY;
   const row = Math.min(Math.floor(canvasTop / (CELL_SIZE + 1)), height - 1);
   const col = Math.min(Math.floor(canvasLeft / (CELL_SIZE + 1)), width - 1);
@@ -134,6 +149,15 @@ canvas.addEventListener("click", event => {
   drawGrid();
   drawCells();
 });
+
+
+const step = () => {
+  fps.render();
+  universe.tick();
+  drawGrid();
+  drawCells();
+  animationId = null;
+}
 
 const renderLoop = (timestamp) => {
   if ((timestamp - lastTimestamp) >= (1000.0 / maxFps)) {

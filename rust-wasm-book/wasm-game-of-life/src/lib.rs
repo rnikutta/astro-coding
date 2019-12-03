@@ -119,7 +119,7 @@ impl Universe {
         let height = 128;
         let cells = (0..width * height)
             .map(|i| {
-                if i % 2 == 0 || i % 7 == 0 {
+                if i % 3 == 0 || i % 7 == 0 {
                     Cell::ALIVE
                 } else {
                     Cell::DEAD

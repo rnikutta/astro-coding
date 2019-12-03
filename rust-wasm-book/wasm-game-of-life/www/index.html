@@ -27,10 +27,19 @@
   </head>
   <body>
     <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
-    <div class="row mb-2">
+    <div class="row mb-2"> 
       <div class="col">
         <button type="button" class="btn btn-primary" id="play-pause">Pause</button>
       </div>
+      <div class="col">
+        <button type="button" class="btn btn-primary" id="step">Step</button>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col">
+          <label for="fps">Frames per</label>
+          <input type="text" id="fps" value="10">
+        </div>
     </div>
     <div class="row mb-2">
       <div class="col">
