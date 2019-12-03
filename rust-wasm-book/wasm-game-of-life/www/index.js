@@ -14,6 +14,9 @@ const canvas = document.getElementById("game-of-life-canvas");
 canvas.height = (CELL_SIZE + 1) * height + 1;
 canvas.width = (CELL_SIZE + 1) * width + 1;
 
+var maxFps = 20.0;
+var lastTimestamp = 0.0;
+
 const ctx = canvas.getContext('2d');
 
 const fps = new class {
@@ -102,7 +105,7 @@ const isPaused = () => {
 
 const play = () => {
   playPauseButton.textContent = "Pause";
-  renderLoop();
+  animationId = requestAnimationFrame(renderLoop);
 }
 
 const pause = () => {
@@ -132,11 +135,14 @@ canvas.addEventListener("click", event => {
   drawCells();
 });
 
-const renderLoop = () => {
-  fps.render();
-  universe.tick();
-  drawGrid();
-  drawCells();
+const renderLoop = (timestamp) => {
+  if ((timestamp - lastTimestamp) >= (1000.0 / maxFps)) {
+    lastTimestamp = timestamp;
+    fps.render();
+    universe.tick();
+    drawGrid();
+    drawCells();
+  }
   animationId = requestAnimationFrame(renderLoop);
 };
 play();
