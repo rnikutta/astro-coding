@@ -99,7 +99,7 @@ const drawCells = () => {
 let animationId = null;
 const playPauseButton = document.getElementById("play-pause");
 const stepButton = document.getElementById("step");
-const fpsInput = document.getElementById("fps")
+const fpsInput = document.getElementById("fps-field")
 fpsInput.value = maxFps;
 
 const isPaused = () => {
