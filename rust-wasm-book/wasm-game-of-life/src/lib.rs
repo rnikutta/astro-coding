@@ -126,7 +126,7 @@ impl Universe {
                 }
             })
             .collect();
-        Universe { width, height, cells, }
+        Universe { width: width, height: height, cells: cells, }
     }
 
     pub fn render(&self) -> String {
