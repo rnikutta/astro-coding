@@ -47,6 +47,7 @@ Pros:
 3. can easily create segments from lists and use those segments
 4. custom fields can be used within templates
 5. can send batches
+
 Cons:
 1. No apparent conditional formatting (this just means lists will have to be segmented further)
 2. Branding present on free tier (can be removed on paid tier)
