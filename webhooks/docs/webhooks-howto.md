@@ -105,19 +105,35 @@ We ended up developing and testing on dltest (the DL test machine).
 <a name="receiving"></a>
 ### Receiving
 
+Implement an `/receive` api to subscribe only to certain events that 
+meet the criteria. For example, this example webhook only checks for 
+the events that push to the master branch of `github-experiments` repository.
+So it only checks for the following conditions:
+
+ 1. In the request header, the 'X-Github-Event' needs to be 'push'.
+ 2. The branch name of the event needs to be 'master'.
+ 3. The repository name needs to be `github-experiments`.
+
 <a name="validating"></a>
 ### Validating
 
-... which contains a string like
+For security reason, it is also necessary to limit the requests only to 
+ those from github. Among all the options, we chose to use a secret token
+ which is randomly generated string, we shared with the Github webhook 
+ machinery when we were setting up the webhook. On the server side, we are 
+ checking the `X-Hub-Signature` field, which contains a string like
 `sha1=d9737924bbcf396a7955753c23b22bb273013615`. This is the SHA1
-hashsum of the payload part of the webhook, computed using a secret
-that we shared with the Github webhook machinery when we were setting
-up the webhook.
+hashsum of the payload part of the webhook, computed using the secret token
+mentioned above.
 
 
 <a name="actingupon"></a>
 ### Acting upon validated reception
 
+Once the request is validated using SHA1 mechanism, and also meet the certain
+criteria, you could choose to call the function you would like the webhook to
+trigger. For our scenario, a script that updates the notebooks is triggered on 
+the notebook-server.
 <a name="references"></a>
 ## References
 
