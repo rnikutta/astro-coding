@@ -1,11 +1,20 @@
 # Fun with Github webhooks
 
+Edit me
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
 2. [Prerequisites](#prerequisites)
 3. [Webhooks server-side](#serverside)
     1. [Setting up a webhook on a Github repository](#serverside-setup)
+    2. [Setting up a webhook on a Github repository](#webhookstructure)
+    3. [Triggering webhook / send beacon](#triggering)
+4. [Webhooks on our side](#ourside)
+   1. [Receiving](#receiveing)
+   2. [Validating](#validating)
+   3. [Acting upon validated reception](#actingupon)
+5. [References](#references)
 
 
 <a name="introduction"></a>
@@ -33,8 +42,15 @@ Github.
 For the purpose of this tutorial, we will work with a repository
 `github-experiments`, for which we will set up webhooks.
 
-![alt text](./github-settings-main.png)
+As the owner or admin of the repository, go to the _Settings_ tab:
 
+[Settings](./github-settings-main.png)
+
+Then on the left hand side click left on _Webhooks_:
+
+[Webhooks](./github-settings-webhooks.png)
+
+<a name="webhookstructure"></a>
 ### Structure of a webhook
 
 A webhook is a simply data sent via simple POST request from Github to
@@ -71,9 +87,11 @@ triggered this webhook delivery (*X-GitHub-Event*) was `push`.
 Every header will contain th field *X-Hub-Signature* which we will
 later use to [validate each received webhook](#validating).
 
+<a name="triggering"></a>
 ### Triggering webhook / send beacon
 
 
+<a name="ourside"></a>
 ## Webhooks on our side
 
 Need a service endpoint to listen to the incoming beacons.
@@ -84,6 +102,7 @@ EC2. [TODO: write a separate howto on that, and link here]
 
 We ended up developing and testing on dltest (the DL test machine). 
 
+<a name="receiving"></a>
 ### Receiving
 
 <a name="validating"></a>
@@ -96,8 +115,10 @@ that we shared with the Github webhook machinery when we were setting
 up the webhook.
 
 
+<a name="actingupon"></a>
 ### Acting upon validated reception
 
+<a name="references"></a>
 ## References
 
 Github webhooks developer guide: https://developer.github.com/webhooks/
