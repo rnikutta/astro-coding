@@ -1,8 +1,4 @@
-_Author: Robert Nikutta (nikutta@noao.edu), Wendy Huang (huang@noao.edu)_
-
-_Version: 2020-01-14_
-
-# Fun with Github webhooks
+# Update `notebooks-latest/` locally (on DL end) using webhooks
 
 ## Table of Contents
 
@@ -45,6 +41,11 @@ git terminology, i.e. you know how to make a repository, clone it,
 make changes to its content, commit the changes, and push them back to
 Github.
 
+<a name="lifecycle"></a>
+## Update process lifecycle
+
+<img src="./webhooks-uml-sequence-diagram.png"/>
+
 <a name="serverside"></a>
 ## Webhooks server-side
 
@@ -71,33 +72,20 @@ button, it will bring you to this form:
 
 To set up a webhook on Github we always need these pieces of information:
 
-* _A payload URL_ -- That's the URL that a triggered webhook will send it's "payload" to
+* A payload URL -- That's the URL that a triggered webhook will send it's "payload" to
 
   For our experiment here, the payload-receiving URL (running on the
   machine we control) will be `https://datalab.noao.edu/webhook/receive`
 
-* _Content type_ -- Select `application/json`
+* Content type -- Select `application/json`
 
-* _Secret_ -- A long random string that will be used by Github to generate a hashsum of the payload.
+* Secret -- A long random string that will be used by Github to
+  generate a hashsum of the payload; we need it to verify that
+  incoming webhooks are actually being sent by Github and not an imposter (more in #validating)
 
-  To generate a long and truly random string to use for a secret, you can do in Python:
-  
-  ```
-  import secrets
-  secrets.token_hex(40)
-  'ca7eb2a7c520fcadb5de314c445156662e608feb2fff99f866570516905551245f090778a1c53a08'
-  ```
-  
-  The output is a 40-bytes long string of random characters (and in
-  hexadecimal that's 80 characters). Copy and paste this string into
-  the `Secret` field. We will later use the same secret string to
-  compute the hashsum of the payload ourselves.
+- Select which events should trigger a webhook -- Here, select "Just the push event"
 
-  More details in Section on [validating webhooks](#validating).
-
-- Select which events on the Github repo should trigger a webhook -- Here, select "Just the push event"
-
-- Finally, you can set a webhook active or inactive -- Set ours to "Active" by checking the box.
+- Finally, you can set a webhook active or inactive -- Set ours to "Active"
 
 <!--
 '  ; when we receive the payload, we
@@ -183,25 +171,6 @@ For security reason, it is also necessary to limit the requests only to
 `sha1=d9737924bbcf396a7955753c23b22bb273013615`. This is the SHA1
 hashsum of the payload part of the webhook, computed using the secret token
 mentioned above.
-
-
-
-
-  Only if the result matches the hashsum
-  provided by the webhook in the header, can we be sure that the
-  beacon, and its payload, indeed come from someone who shares the
-  secret with us (i.e., Github).
-  
-  The reason why this works and is secure, is that hash functions are
-  one-way; using a secret one can trivially compute a unique hashsum
-  of any input data (i.e. of the payload), but knowing the hashsum if
-  is impossible to compute back the data. It is even practically
-  impossible the generate a different input file that would produce
-  the same hashsum.
-  
-
-
-
 
 
 <a name="actingupon"></a>
