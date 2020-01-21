@@ -199,9 +199,21 @@ mentioned above.
   impossible the generate a different input file that would produce
   the same hashsum.
   
+  The process of validating is: 
+  1. First compute the hashsum using HAMC hexdigest, with the secret token
+  as key and payload as msg. 
+  2. Then compare the computed hashsum with the 
+  hashsum sent from GitHub (`X-Hub-Signture` field in the header).
+  
+  The code looks like this:
 
-
-
+  ```
+     def is_valid(body, signature, token):
+         key = bytes(token.encode())
+         digester = hmac.new(key, msg=body, digestmod=hashlib.sha1)
+         sig = digester.hexdigest()
+         return hmac.compare_digest(str(sig), str(signature))
+   ```
 
 
 <a name="actingupon"></a>
